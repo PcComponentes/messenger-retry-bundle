@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  php:
+    environment:
+      - XDEBUG_MODE=coverage
+    build: .
+    volumes:
+      - .:/var/app
+      - ~/.composer:/.composer
