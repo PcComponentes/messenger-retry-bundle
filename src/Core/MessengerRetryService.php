@@ -15,7 +15,7 @@ final class MessengerRetryService implements RetryStrategyInterface
         $this->retryConfigurations = $retryConfigurations;
     }
 
-    public function isRetryable(Envelope $message): bool
+    public function isRetryable(Envelope $message, \Throwable $throwable = null): bool
     {
         $retryConfiguration = $this->getRetryConfiguration($message);
 
@@ -26,7 +26,7 @@ final class MessengerRetryService implements RetryStrategyInterface
         return $retryConfiguration->isRetryable($message);
     }
 
-    public function getWaitingTime(Envelope $message): int
+    public function getWaitingTime(Envelope $message, \Throwable $throwable = null): int
     {
         $retryConfiguration = $this->getRetryConfiguration($message);
 

@@ -25,18 +25,19 @@
   },
   "require": {
     "php": "^8.0",
-    "pccomponentes/ddd": "^3.0 || ^4.0",
-    "symfony/framework-bundle": "^4.4 || ^5.0",
-    "symfony/messenger": "^4.4 || ^5.0"
+    "pccomponentes/ddd": "^4.0",
+    "symfony/framework-bundle": "^6.0",
+    "symfony/messenger": "^6.0"
   },
   "require-dev": {
-    "dg/bypass-finals": "^1.1",
-    "pccomponentes/coding-standard": "^1.0",
-    "phpunit/phpunit": "^9.0"
+    "dg/bypass-finals": "^1.4",
+    "pccomponentes/coding-standard": "^2.0",
+    "phpunit/phpunit": "^9.5"
   },
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
-    }
+    },
+    "sort-packages": true
   }
 }
