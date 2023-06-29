@@ -48,6 +48,6 @@ final class MessengerRetryService implements RetryStrategyInterface
             return null;
         }
 
-        return \current($retryConfigurations);
+        return $retryConfigurations[\array_key_first($retryConfigurations)];
     }
 }
