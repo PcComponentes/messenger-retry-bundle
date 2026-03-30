@@ -6,10 +6,14 @@ namespace PcComponentes\MessengerRetryBundle\Core;
 use PcComponentes\Ddd\Util\Message\Message;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Retry\MultiplierRetryStrategy;
+use Symfony\Component\Messenger\Stamp\RedeliveryStamp;
 
 final class MessengerRetryConfiguration extends MultiplierRetryStrategy
 {
     private array $msgTypes;
+    private int $delayMilliseconds;
+    private float $multiplier;
+    private int $maxDelayMilliseconds;
 
     public function __construct(
         int $maxRetries,
@@ -20,6 +24,9 @@ final class MessengerRetryConfiguration extends MultiplierRetryStrategy
     ) {
         parent::__construct($maxRetries, $delayMilliseconds, $multiplier, $maxDelayMilliseconds);
 
+        $this->delayMilliseconds = $delayMilliseconds;
+        $this->multiplier = $multiplier;
+        $this->maxDelayMilliseconds = $maxDelayMilliseconds;
         $this->msgTypes = $msgTypes;
     }
 
@@ -34,6 +41,18 @@ final class MessengerRetryConfiguration extends MultiplierRetryStrategy
         }
 
         return parent::isRetryable($message, $throwable);
+    }
+
+    public function getWaitingTime(Envelope $message, ?\Throwable $throwable = null): int
+    {
+        $retries = RedeliveryStamp::getRetryCountFromEnvelope($message);
+        $delay = $this->delayMilliseconds * $this->multiplier ** $retries;
+
+        if ($delay > $this->maxDelayMilliseconds && 0 !== $this->maxDelayMilliseconds) {
+            return $this->maxDelayMilliseconds;
+        }
+
+        return (int) \ceil($delay);
     }
 
     public function isValidMessage(Envelope $message): bool
